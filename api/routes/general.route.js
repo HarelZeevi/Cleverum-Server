@@ -28,4 +28,7 @@ module.exports = (app) => {
     // sign in - returns student object
     app.post('/api/signIn', (req, res) => generalController.signIn(req, res));
 
+    // register to the app 
+    app.post('/api/register', (req, res) => generalController.register(req, res));
+
 }

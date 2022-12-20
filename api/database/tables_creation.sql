@@ -4,12 +4,11 @@ use balenoupgdfsd3lf0k3j;
 CREATE TABLE users 
   (
      id            	VARCHAR(255) NOT NULL UNIQUE PRIMARY KEY,
-     userType		CHAR(1) NOT NULL, /* 1 = Student or 2 = Teacher */
+     userType		CHAR(1) NOT NULL, /* S = Student or T = Teacher */
 	 profileImg  	VARCHAR(255), 
      imgExtension 	VARCHAR(255),
      fullname     	VARCHAR(255) NOT NULL,
      gender        	CHAR(1), /* M - male or F - female */
-     phone         	VARCHAR(15)  NOT NULL,
      email         	VARCHAR(255) NOT NULL,
      pswd          	VARCHAR(255) NOT NULL,
      token 			VARCHAR(255), 	# for password changing 
