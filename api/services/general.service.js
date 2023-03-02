@@ -135,7 +135,7 @@ const signJwt = (result, resultObj, err, res) => {
             'Access-Control-Allow-Origin': 'http://localhost:3000'
         });
         // invalid password
-        res.end("1");
+        res.end("Invalid id / password!");
         return;
     }
     if (err) {
@@ -149,24 +149,14 @@ const signJwt = (result, resultObj, err, res) => {
         console.log("Query was successfully executed!");
         if (Object.keys(resultObj).length != 0) // if result accepted 
         {
-
-            let uType;
-            if (!resultObj[0].userType) {
-                uType = 'A' // admin
-            } else {
-                uType = resultObj[0].userType // 'P' or 'T'
-            }
-
-            if (uType === 'T')
-                resultObj[0].isTeacher = true;
-            else
-                resultObj[0].isTeacher = false;
-            user = Object.values(JSON.parse(JSON.stringify(resultObj)))[0];
+            let user = Object.values(JSON.parse(JSON.stringify(resultObj)))[0];
+            
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
-            console.log(accessToken);
+
             res.writeHead(200, {
                 'Access-Control-Allow-Origin': 'http://localhost:3000'
             });
+
             res.end(JSON.stringify({
                 accessToken: accessToken
             }))
@@ -175,7 +165,7 @@ const signJwt = (result, resultObj, err, res) => {
             res.writeHead(200, {
                 'Access-Control-Allow-Origin': 'http://localhost:3000'
             });
-            res.end("1")
+            res.end("not found")
         }
     }
     return resultObj;
