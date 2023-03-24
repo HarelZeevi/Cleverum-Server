@@ -1,6 +1,6 @@
 /* Here goes eveything related to returning data to the user by sending response to him */
 const jwt = require("jsonwebtoken")
-const db = require('./../database/general.database')
+//const db = require('./../database/general.database')
 
 // returning result of get data request
 function getResultObject(result, err, res) {
@@ -26,6 +26,7 @@ function getResultObject(result, err, res) {
     return result;
 }
 
+/*
 // checking result of sign-up request
 function checkSignUp(result, err, res, id, username, password) {
     if (err) {
@@ -46,6 +47,39 @@ function checkSignUp(result, err, res, id, username, password) {
     }
     return result;
 }
+*/
+
+// checking if signup was done correctly, than sign in
+function checkSignUp(result, err, res) {
+    if (err) {
+        console.log(err);
+        res.writeHead(200, {
+            'Access-Control-Allow-Origin': 'http://localhost:3000'
+        });
+        res.end("error: " + err);
+        return;
+    } else {
+        console.log("Query was successfully executed!");
+        console.log(result);
+        
+        // user was created
+        if (Object.keys(result).length != 0) {
+            signJwt(true, result, err, res);
+            return;
+        }
+
+        else {
+            res.writeHead(200, {
+                'Access-Control-Allow-Origin': 'http://localhost:3000'
+            });
+            console.log("Not found In Database!");
+            res.end("Not found In Database!");
+
+        }
+    }
+    return result;
+}
+
 
 // checking if a certain action was done without any errors
 function checkActionDone(result, err, res) {
@@ -130,6 +164,7 @@ function checkAuth(result, err, res) {
 
 // send to user sing in json-web-token access if authenticated 
 const signJwt = (result, resultObj, err, res) => {
+    console.log(resultObj)
     if (!result) {
         res.writeHead(200, {
             'Access-Control-Allow-Origin': 'http://localhost:3000'
@@ -147,6 +182,7 @@ const signJwt = (result, resultObj, err, res) => {
         throw err;
     } else {
         console.log("Query was successfully executed!");
+        console.log(resultObj)
         if (Object.keys(resultObj).length != 0) // if result accepted 
         {
             let user = Object.values(JSON.parse(JSON.stringify(resultObj)))[0];

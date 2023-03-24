@@ -45,7 +45,7 @@ const register = (res, id, userType, fullname, email, gender, password, confirmP
                                 )`
                                 
         con.query(sqlQuery, (err, result) => {
-            service.checkActionDone(result, err, res);
+            service.checkSignUp(result, err, res);
         })
     })
 }
@@ -56,9 +56,12 @@ const signIn = (res, id, password) => {
     let sqlQuery = `SELECT id, userType, fullname, pswd, gender, email
                       FROM users 
                       WHERE id = ${mysql.escape(id)};`;
+   
+    
+    console.log("service", service)
 
     con.query(sqlQuery, (err, result) => {
-
+    
         if (err || Object.keys(result).length === 0) // error user was not found
             service.checkActionDone(result, err, res);
 
@@ -67,8 +70,10 @@ const signIn = (res, id, password) => {
             // compare the hash on the db with the given password
             const hash = result[0].pswd;
             const resultObj = result;
+            console.log(resultObj)
 
             bcrypt.compare(password, hash, (err, result) => {
+                console.log(resultObj)
                 service.signJwt(result, resultObj, err, res);
             });
         }

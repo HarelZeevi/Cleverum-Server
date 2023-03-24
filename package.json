@@ -9,11 +9,14 @@
   "author": "harel zeevi",
   "license": "ISC",
   "dependencies": {
+    "atob": "^2.1.2",
+    "base64-js": "^1.5.1",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "ws": "^8.12.0"
   }

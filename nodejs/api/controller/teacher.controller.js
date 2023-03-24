@@ -8,22 +8,14 @@ const uploadDocuemnt = (req, res) => {
         res.writeHead(200, {
             "Access-Control-Allow-Origin": "http://localhost:3000",
         });
-        res.end("You are not allowed to do this action!");
-    }
+       res.end("You are not allowed to do this action!");
+	}
 
-    
-    if (!req.body || Object.keys(req.body).length === 0) {
-        console.log("no file");
-        res.status(200).send("No files were uploaded.");
-    } else {
-        console.log("Starting file upload!");
-        let profileImg = req.body.profileImg;
-        let studentId = req.tokenData.id;
-        teacherdb.uploadProfileImage(res, studentId, profileImg);
-    }
+    console.log(reg.files)
+    // file name 
+    const file = req.body.files
+    console.log(file)
 }
-
-
 
 const getTests = (req, res) => {
 	// if not a teacher -> disallow 

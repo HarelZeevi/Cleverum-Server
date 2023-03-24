@@ -23,6 +23,7 @@ const generalController = require('./../controller/general.controller')
 const app = express();
 
 
+
 // exporting routes
 module.exports = (app) => {
    
@@ -60,7 +61,7 @@ module.exports = (app) => {
 	app.post('/api/teacher/getParticipants', middleware.authJwt, (req, res) => teacherController.getParticipants(req, res));
     
 	// dowload the uploaded test document 
-	app.post('/api/teacher/getTestDocument', middleware.authJwt, (req, res) => teacherController.getTestDocument(req, res));
+	app.get('/api/teacher/getTestDocument', middleware.authJwt, (req, res) => teacherController.getTestDocument(req, res));
 
 	
 
@@ -75,18 +76,3 @@ module.exports = (app) => {
 	app.post('/api/student/submitTestDocument', middleware.authJwt, (req, res) => studentController.submitTestDocument(req, res));
 
 }
-const uploadDocument = (req, res) => {
-    // if not a teacher -> disallow 
-    if (!(req.tokenData.userType === "S")) {
-        res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000",
-        });
-        res.end("You are not allowed to do this action!");
-	}
-
-	const id = req.tokenData.id;
-	
-	teacherDB.uploadDocument(res, id); 
-}
-
-

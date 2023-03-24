@@ -1,6 +1,5 @@
 const express = require("express");
 
-
 const middleware = require('./../middlewares/general.middleware')
 const validator = require('./../validations/general.validation')
 const helpers = require('./../helpers/general.helpers')
@@ -9,6 +8,7 @@ const helpers = require('./../helpers/general.helpers')
 const studentController = require('./../controller/student.controller');
 const teacherController = require('./../controller/teacher.controller');
 const generalController = require('./../controller/general.controller')
+
 
 
 /* API routes*/

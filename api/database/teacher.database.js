@@ -6,40 +6,20 @@ const con = require('./connect.database')
 const service = require('./../services/general.service')
 
 
-// image profile upload 
-const uploadProfileImage = (res, studentId, docData) => {
-    let uploadPath = "./../../../../tests" + studentId;
-    let imgType;
+
+// save test's file name 
+const saveDocName = (res, testId, teacherId, filename) => {
+    // save file name in test record 
     
-    // check file extension 
-    let fileExtension = docData.split('.')[1]
-    if (fileExtension === "docx" || fileExtension === "doc") {
-        console.log("Estension: " + fileExtension);
-        
-        fs.writeFile(
-            uploadPath,
-            docData,
-            fileExtension,
-            err => console.log("Error: " + err)
-        );
-    }
-    else {
-        res.writeHead(200, {"Access-Control-Allow-Origin": "http://localhost:3000",});
-        res.end("Invalid file extension! only doc / docs is allowed");
-        return;
-    }
-
-    uploadPath += imgType;
-
-    console.log(uploadPath);
-    console.log("Image approved!");
-    let sqlQuery = `UPDATE students SET imgFileExt = ${mysql.escape(imgType)} WHERE id = ${mysql.escape(studentId)};`;
-    console.log(sqlQuery);
+    let sqlQuery = `UPDATE tests SET filename=${mysql.escape(filename)} 
+                    WHERE id=${testId} AND teacherId=${teacherId}`;
+	
     con.query(sqlQuery, (err, result) => {
-        service.checkActionDone(result, err, res);
-    });
+    	service.checkActionDone(result, err, res);
+	});
 
 };
+
 
 
 // get tests 
@@ -51,6 +31,8 @@ const getTests = (res, id) => {
     });
 } 
 
+
+
 // create test 
 const createTest = (res, id, topic, subtopic, timeLimit, grade) => {
 	let sqlQuery = `INSERT INTO tests (teacherid, topic, subtopic, timelimit, grade) 
@@ -61,16 +43,22 @@ const createTest = (res, id, topic, subtopic, timeLimit, grade) => {
 	});
 }
 
+
+
 // remove test 
 const removeTest = (res, id, testId) => {
 	let sqlQuery = `DELETE FROM tests WHERE teacherId = ${mysql.escape(id)} and id = ${mysql.escape(testId)}`;	
+    console.log(sqlQuery)
     con.query(sqlQuery, (err, result) => {
         service.checkActionDone(result, err, res);
     });
 } 
 
+
+
 module.exports = {
-	getTests,
+	saveDocName,
+    getTests,
 	createTest,
 	removeTest
 
