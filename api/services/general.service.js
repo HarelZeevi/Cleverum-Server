@@ -6,57 +6,49 @@ const jwt = require("jsonwebtoken")
 function getResultObject(result, err, res) {
     if (err) {
         console.log(err);
-        res.send("Error!");
+        res.status(500).send("Error! " + err);
     } else {
         console.log("Query was successfully executed!");
         console.log(result);
         if (Object.keys(result).length != 0) {
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
-            res.end(JSON.stringify(result));
+           res.send(JSON.stringify(result));
         } else {
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
-            res.end("Not found");
+            res.status(500).send("Not found");
             console.log("We didnt find what you are looking for...")
         }
     }
     return result;
 }
 
-/*
-// checking result of sign-up request
-function checkSignUp(result, err, res, id, username, password) {
+
+
+// returning result of get data request
+function startTest(result, err, res, tokenObj) {
     if (err) {
         console.log(err);
-        res.send("Error!");
+        res.status(500).send("Error! " + err);
     } else {
         console.log("Query was successfully executed!");
         console.log(result);
-        if (result.affectedRows === 1) {
-            db.signIn(res, id, username, password)
+        if (Object.keys(result).length != 0) {
+           res.send(JSON.stringify(tokenObj));
         } else {
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
-            res.end("Not found In Database!");
-            console.log("Not found In Database!");
+            res.status(500).send("Not found");
+            console.log("We didnt find what you are looking for...")
         }
     }
     return result;
 }
-*/
+
+
+
+
 
 // checking if signup was done correctly, than sign in
 function checkSignUp(result, err, res) {
     if (err) {
         console.log(err);
-        res.writeHead(200, {
-            'Access-Control-Allow-Origin': 'http://localhost:3000'
-        });
-        res.end("error: " + err);
+        res.status(500).send("error: " + err);
         return;
     } else {
         console.log("Query was successfully executed!");
@@ -69,11 +61,8 @@ function checkSignUp(result, err, res) {
         }
 
         else {
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
             console.log("Not found In Database!");
-            res.end("Not found In Database!");
+            res.status(500).send("Not found In Database!");
 
         }
     }
@@ -85,100 +74,52 @@ function checkSignUp(result, err, res) {
 function checkActionDone(result, err, res) {
     if (err) {
         console.log(err);
-        res.writeHead(200, {
-            'Access-Control-Allow-Origin': 'http://localhost:3000'
-        });
-        res.end("error: " + err);
+        res.status(500).send("error: " + err);
         return;
     } else {
         console.log("Query was successfully executed!");
         console.log(result);
         if (Object.keys(result).length != 0) {
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
-            res.end("Done successfully!");
+            res.send("Done successfully!");
         } else {
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
             console.log("Not found In Database!");
-            res.end("Not found In Database!");
+            res.status(500).send("Not found In Database!");
 
         }
     }
     return result;
 }
 
-// checking if availablilty was added without any errors
-function checkError(result, err, res, resolve) {
-    if (!res.headersSent) {
-        if (err != null)
-            console.log("err");
-        if (err) {
-            //res.writeHead(200, {'Access-Control-Allow-Origin': 'http://localhost:3000'});
-            console.log(err);
-            //res.end("error: " + err);
-            return resolve(err);
-        }
-        if (result.affectedRows === 0) {
-            //res.writeHead(200, {'Access-Control-Allow-Origin': 'http://localhost:3000'});
-            console.log("Not found In Database!");
-            //res.end("Not found In Database!");
-            return resolve("Not found");
-        }
 
-    }
-    resolve();
-
-}
-
-
-// checking auth
-function checkAuth(result, err, res) {
+// returning result of get data requesti without sending it to the client
+function getResultNoSend(result, err, callback) {
     if (err) {
         console.log(err);
-        res.send("Error!");
-        throw err;
+        callbac(null, err) 
     } else {
+        console.log("Query was successfully executed!");
+        console.log(result);
         if (Object.keys(result).length != 0) {
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
-            if (result[0].pswd != null) {
-                console.log("The user is already registerd.");
-                return res.end("The user is already registerd.");
-            }
-            console.log("user exists")
-            res.end("User Exists!");
+           callback(JSON.stringify(result), null);
         } else {
-            console.log("User was Not found!");
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
-            res.end("User was Not found!");
+            callback(null, "Not found");
+            console.log("We didnt find what you are looking for...")
         }
     }
-    return result;
 }
+
 
 // send to user sing in json-web-token access if authenticated 
 const signJwt = (result, resultObj, err, res) => {
     console.log(resultObj)
     if (!result) {
-        res.writeHead(200, {
-            'Access-Control-Allow-Origin': 'http://localhost:3000'
-        });
         // invalid password
-        res.end("Invalid id / password!");
+        res.status(500).send("Invalid id / password!");
         return;
     }
     if (err) {
         console.log(err);
-        res.writeHead(200, {
-            'Access-Control-Allow-Origin': 'http://localhost:3000'
-        });
-        res.end("Error!");
+        res.status(500).send("Error: " + err);
         throw err;
     } else {
         console.log("Query was successfully executed!");
@@ -189,19 +130,12 @@ const signJwt = (result, resultObj, err, res) => {
             
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
 
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
-
-            res.end(JSON.stringify({
+            res.send(JSON.stringify({
                 accessToken: accessToken
             }))
         } else {
             console.log("not found");
-            res.writeHead(200, {
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            });
-            res.end("not found")
+            res.status(500).send("not found")
         }
     }
     return resultObj;
@@ -212,7 +146,6 @@ module.exports = {
     getResultObject,
     checkSignUp,
     checkActionDone,
-    checkError,
-    checkAuth,
+    startTest,
     signJwt
 }

@@ -1,20 +1,16 @@
 const teacherDB = require("./../database/teacher.database")
 const con = require("../database/connect.database");
-const multer = require("multer")
 const helpers = require("../helpers/general.helpers")
 const fs = require('fs')
-
+const ipaddr = require('ipaddr.js');
 
 
 // this function allows the teacher to upload the word document for a created test
 const uploadDocument = (req, res) => {
     
     // if not a teacher -> disallow 
-    if (!(req.tokenData.userType === "S")) {
-        res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000",
-        });
-        res.end("You are not allowed to do this action!");
+    if (!(req.tokenData.userType === 2)) {
+        res.status(500).send("You are not allowed to do this action!");
     }
 
     
@@ -41,12 +37,10 @@ const uploadDocument = (req, res) => {
 
 
 const getTests = (req, res) => {
-	// if not a teacher -> disallow 
-    if (!(req.tokenData.userType === "S")) {
-        res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000",
-        });
-        res.end("You are not allowed to do this action!");
+    console.log(req.tokenData.userType)
+    // if not a teacher -> disallow 
+    if (!(req.tokenData.userType === 2)) {
+        return res.status(500).send("You are not allowed to do this action!");
 	}
 
 	const id = req.tokenData.id;
@@ -56,12 +50,9 @@ const getTests = (req, res) => {
 
 const createTest = (req, res) => {
     // if not a teacher -> disallow 
-    if (!(req.tokenData.userType === "S")) {
-        res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000",
-        });
-        res.end("You are not allowed to do this action!");
-	}
+    if (!(req.tokenData.userType === 2)) {
+        return res.status(500).send("You are not allowed to do this action!");
+    }
 
 	const id = req.tokenData.id;
 	const topic = req.body.topic;
@@ -75,12 +66,8 @@ const createTest = (req, res) => {
 
 const removeTest = (req, res) => {
     // if not a teacher -> disallow 
-    if (!(req.tokenData.userType === "S")) {
-        res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000",
-        });
-        res.end("You are not allowed to do this action!");
-	
+    if (!(req.tokenData.userType === 2)) {
+        return res.status(500).send("You are not allowed to do this action!");
 	}
 		
 	const id = req.tokenData.id;
@@ -101,27 +88,23 @@ const removeTest = (req, res) => {
 
 const startTest = (req, res) => {
     // if not a teacher -> disallow 
-    if (!(req.tokenData.userType === "S")) {
-        res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000",
-        });
-        res.end("You are not allowed to do this action!");
+    if (!(req.tokenData.userType === 2)) {
+        res.status(500).send("You are not allowed to do this action!");
 	}
 
-	const id = req.body.id;	
+	const id = req.tokenData.id;	
 	const testId = req.body.testId; 
-
-	teacherDB.startTest(res, id, testId);
+    const ip = ipaddr.process(req.ip).toString();
+    const token = helpers.generateRandomString(8);
+    console.log(id, testId, ip, token) 
+	teacherDB.startTest(res, id, testId, ip, token);
 }
 
 
 const getParticipants = (req, res) => {
-    // if not a teacher -> disallow 
-    if (!(req.tokenData.userType === "S")) {
-        res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000",
-        });
-        res.end("You are not allowed to do this action!");
+    // if not a teacher -> disallow
+    if (!(req.tokenData.userType === 2)) {
+        res.status(500).send("You are not allowed to do this action!");
 	}
 
 	const id = req.body.id;	
@@ -133,11 +116,8 @@ const getParticipants = (req, res) => {
 
 const getTestDocument = (req, res) => {
     // if not a teacher -> disallow 
-    if (!(req.tokenData.userType === "S")) {
-        res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3000",
-        });
-        res.end("You are not allowed to do this action!");
+    if (!(req.tokenData.userType === 2)) {
+        res.status(500).send("You are not allowed to do this action!");
 	}
         
     const teacherId = req.tokenData.id;

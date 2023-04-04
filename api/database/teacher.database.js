@@ -1,6 +1,6 @@
-const fs = require("fs")
 const mysql = require('mysql');
 const con = require('./connect.database')
+const helpers = require('./../helpers/general.helpers')
 
 // service commands file 
 const service = require('./../services/general.service')
@@ -56,10 +56,25 @@ const removeTest = (res, id, testId) => {
 
 
 
+// generate test instance and save it's token
+const startTest = (res, id, testId, ip, token) => {
+    
+    let sqlQuery = `INSERT INTO test_instances (id, accessToken, classId, testId, doneDate, startedHour, serverIp)
+                    VALUES (NULL, ${mysql.escape(token)}, NULL, ${mysql.escape(testId)}, NULL, NULL, ${mysql.escape(ip)})`
+    
+
+    const tokenObj = {"accessToken": token} 
+    con.query(sqlQuery, (err, result, tokenObj) => {
+        service.startTest(result, err, res, tokenObj);
+    });
+}     
+
+
+
 module.exports = {
 	saveDocName,
     getTests,
 	createTest,
-	removeTest
-
+	removeTest,
+    startTest
 }

@@ -55,7 +55,7 @@ module.exports = (app) => {
 	app.post('/api/teacher/getScreenshot', middleware.authJwt, (req, res) => teacherController.getScreenshot(req, res));
 
 	// start the test and create a usable live instace of the created test
-	app.post('/api/startTest', middleware.authJwt, (req, res) => teacherController.startTest(req, res));
+	app.post('/api/teacher/startTest', middleware.authJwt, (req, res) => teacherController.startTest(req, res));
     
 	// get all of the participants in a specifc live test 
 	app.post('/api/teacher/getParticipants', middleware.authJwt, (req, res) => teacherController.getParticipants(req, res));
@@ -67,9 +67,10 @@ module.exports = (app) => {
 
 	/* student api calls */	
     
-	// enter a test 
-	app.post('/api/student/enterTest', middleware.authJwt, (req, res) => studentController.enterTest(req, res));	
-	// get test document
+	// enter the test
+	app.get('/api/student/enterTest', middleware.authJwt, (req, res) => studentController.enterTest(req, res));	
+	
+    // get test document
 	app.get('/api/student/getTestDocument', middleware.authJwt, (req, res) => studentController.getTestDocument(req, res));
 
 	// submit the tests document 	

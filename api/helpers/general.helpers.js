@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+  const bcrypt = require('bcrypt')
 const fs = require('fs');
 const path = require('path');
 const base64 = require('base64-js');
@@ -52,9 +52,25 @@ const fileToBase64 = filePath => {
 }
 
 
+/**
+ * Generates a random string of the given length containing letters (uppercase or not) and numbers.
+ * @param {number} length - The length of the random string to generate.
+ * @returns {string} A random string of the given length containing letters and numbers.
+ */
+const generateRandomString = length => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 
 module.exports = {
     hashPassword,
     saveDocxFromBase64,
-    fileToBase64
+    fileToBase64,
+    generateRandomString
 }
