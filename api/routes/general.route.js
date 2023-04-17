@@ -68,8 +68,8 @@ module.exports = (app) => {
 	/* student api calls */	
     
 	// enter the test
-	app.get('/api/student/enterTest', middleware.authJwt, (req, res) => studentController.enterTest(req, res));	
-	
+	app.get('/api/student/enterTest', middleware.authJwt, (req, res) => studentController.enterTest(req, res));
+
     // get test document
 	app.get('/api/student/getTestDocument', middleware.authJwt, (req, res) => studentController.getTestDocument(req, res));
 

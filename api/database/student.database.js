@@ -11,7 +11,7 @@ const enterTest = (testId, accessToken) => {
     
     let sqlQuery = `SELECT tests.filename, test_instances.serverIp FROM tests
                     
-                    INNER JOIN test_instances ON  tests.id = test_instances.testid
+                    INNER JOIN test_instances ON tests.id = test_instances.testid
                         
                     WHERE test_instances.accessToken = ${mysql.escape(accessToken)} `;
     
@@ -23,4 +23,12 @@ const enterTest = (testId, accessToken) => {
 }
 
 
+const getDocumentName = (testId) => {
+    
+    let sqlQuery = `SELECT tests.filename FROM tests
+                    
+                    INNER JOIN test_instances ON tests.id = test_instances.testid 
+                    
+                    WHERE test_instences`
+}
 
