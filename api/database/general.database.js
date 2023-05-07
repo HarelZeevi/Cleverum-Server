@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const con = require('./connect.database')
 const helpers = require('./../helpers/general.helpers')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 // service commands file 
 const service = require('./../services/general.service')

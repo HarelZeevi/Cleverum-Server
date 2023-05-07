@@ -43,7 +43,10 @@ const submitTestDocument = (req, res) => {
 
 
 // getting the filename of the test document
-const getDocuementName
+const getDocuementName = (req, res) => {
+    return
+}
+
 
 module.exports = {
     enterTest, 
