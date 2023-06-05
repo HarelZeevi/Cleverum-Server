@@ -43,10 +43,26 @@ const register = (res, id, userType, fullname, email, gender, password, confirmP
                                     NULL,
                                     NULL
                                 )`
-                                
+
+	     
+		// query the user into the DB	
         con.query(sqlQuery, (err, result) => {
-            service.checkSignUp(result, err, res);
-        })
+        	if (err)
+				res.status(500).send(err);
+		})
+		
+
+		// tokenize user data into JWT 
+		userData = {
+			"id": id, 
+			"userType": userType, 
+			"fullname": fullname,
+			"pswd": pswd,
+			"gender": gender,
+			"email": email
+		}
+        
+       	service.checkSignUp(result, err, res);
     })
 }
 

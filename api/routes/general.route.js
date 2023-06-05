@@ -27,13 +27,20 @@ const app = express();
 // exporting routes
 module.exports = (app) => {
    
+	/* simple test message */
+	app.get('/', (req, res) => {
+		res.send("<h1>Welcome to Node.js Cleverum Server!</h1>");
+		console.log('New Client asked for / and got Welcome!');
+	});
+
+
 	/* general user api calls */ 
 	
 	// sign in - returns student object
-    app.post('/api/signIn', (req, res) => generalController.signIn(req, res));
+	app.post('/api/signIn', (req, res) => generalController.signIn(req, res));
 
-    // register to the app 
-    app.post('/api/register', (req, res) => generalController.register(req, res));
+	// register to the app 
+	app.post('/api/register', (req, res) => generalController.register(req, res));
 
 	
 	
@@ -43,7 +50,7 @@ module.exports = (app) => {
 	app.get('/api/teacher/getTests', middleware.authJwt, (req, res) => teacherController.getTests(req, res));
     
    	// upload test 	
-    app.post('/api/teacher/uploadDocument', middleware.authJwt, (req, res) => teacherController.uploadDocument(req, res));
+    	app.post('/api/teacher/uploadDocument', middleware.authJwt, (req, res) => teacherController.uploadDocument(req, res));
 	
 	// create test 
 	app.post('/api/teacher/createTest', middleware.authJwt, (req, res) => teacherController.createTest(req, res));
@@ -70,7 +77,7 @@ module.exports = (app) => {
 	// enter the test
 	app.get('/api/student/enterTest', middleware.authJwt, (req, res) => studentController.enterTest(req, res));
 
-    // get test document
+	// get test document
 	app.get('/api/student/getTestDocument', middleware.authJwt, (req, res) => studentController.getTestDocument(req, res));
 
 	// submit the tests document 	

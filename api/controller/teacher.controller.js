@@ -21,13 +21,22 @@ const uploadDocument = (req, res) => {
     const testId = req.body.testId;
 
     // create folder for the test 
-    const dir = process.env.BASE_UPLOADS + `/${escape(teacherId)}/${escape(testId)}/`
+    let dir = process.env.BASE_UPLOADS + `/${escape(teacherId)}/${escape(testId)}/`
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, {
             recursive: true
         });
     }
-    
+   
+
+	// create folder for the test uploads
+	dir = process.env.BASE_UPLOADS + `/${escape(teacherId)}/${escape(testId)}/submitted`
+	if (!fs.existsSync(dir)) {
+		fs.mkdirSync(dir, {
+			recursive: true
+		});
+	}
+
     // save file from base 64
     helpers.saveDocxFromBase64(base64file, dir + escape(filename));
    
@@ -40,7 +49,9 @@ const getTests = (req, res) => {
     console.log(req.tokenData.userType)
     // if not a teacher -> disallow 
     if (!(req.tokenData.userType === 2)) {
-        return res.status(500).send("You are not allowed to do this action!");
+        console.log("Data")
+		console.log(req.tokenData)
+		return res.status(500).send("You are not allowed to do this action!");
 	}
 
 	const id = req.tokenData.id;
@@ -94,9 +105,16 @@ const startTest = (req, res) => {
 
 	const id = req.tokenData.id;	
 	const testId = req.body.testId; 
-    const ip = ipaddr.process(req.ip).toString();
     const token = helpers.generateRandomString(8);
-    console.log(id, testId, ip, token) 
+    
+	let ip = req.socket.remoteAddress;
+	
+	// if localhost
+	if (ip == "::1")
+		ip =  helpers.getLocalIP();
+ 
+
+	console.log(id, testId, ip, token) 
 	teacherDB.startTest(res, id, testId, ip, token);
 }
 

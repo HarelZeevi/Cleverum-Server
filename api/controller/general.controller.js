@@ -27,10 +27,10 @@ const register = (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
-    console.log(id, userType, fullname, email, gender, password, confirmPassword)
+    console.log(id, userType, fullname, email, gender, password, confirmPassword) 
     
     // if user type is a teacher - create an empty folder fot the teacher's test 
-    const dir = process.env.BASE_UPLOADS + `/${teacherId}/`;
+    const dir = process.env.BASE_UPLOADS + `/${id}/`;
 
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, {

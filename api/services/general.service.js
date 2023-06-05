@@ -23,7 +23,7 @@ function getResultObject(result, err, res) {
 
 
 // returning result of get data request
-function startTest(result, err, res, tokenObj) {
+function startTest(result, err, res) {
     if (err) {
         console.log(err);
         res.status(500).send("Error! " + err);
@@ -31,7 +31,7 @@ function startTest(result, err, res, tokenObj) {
         console.log("Query was successfully executed!");
         console.log(result);
         if (Object.keys(result).length != 0) {
-           res.send(JSON.stringify(tokenObj));
+           res.send(JSON.stringify(result));
         } else {
             res.status(500).send("Not found");
             console.log("We didnt find what you are looking for...")

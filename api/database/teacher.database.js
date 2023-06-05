@@ -58,15 +58,18 @@ const removeTest = (res, id, testId) => {
 
 // generate test instance and save it's token
 const startTest = (res, id, testId, ip, token) => {
-    
+    let dateObj = new Date()
+	let date = "" + dateObj.toISOString().slice(0, 19).replace('T', ' ').split(' ')[0];
+	let time = "" + dateObj.getHours() + ":" + dateObj.getMinutes() + ":" + dateObj.getSeconds();
     let sqlQuery = `INSERT INTO test_instances (id, accessToken, classId, testId, doneDate, startedHour, serverIp)
-                    VALUES (NULL, ${mysql.escape(token)}, NULL, ${mysql.escape(testId)}, NULL, NULL, ${mysql.escape(ip)})`
+                    VALUES (NULL, ${mysql.escape(token)}, NULL, ${mysql.escape(testId)}, ${mysql.escape(date)}, ${mysql.escape(time)}, ${mysql.escape(ip)})`
     
 
-    const tokenObj = {"accessToken": token} 
-    con.query(sqlQuery, (err, result, tokenObj) => {
-        service.startTest(result, err, res, tokenObj);
-    });
+    con.query(sqlQuery, (err, result) => {	
+		const tokenObj = {"accessToken": token} 
+		service.startTest(tokenObj, err, res);
+	});
+	
 }     
 
 

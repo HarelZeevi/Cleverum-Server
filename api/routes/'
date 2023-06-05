@@ -1,7 +1,7 @@
 const studentDB = require("./../database/student.database")
 const con = require("../database/connect.database");
 const helpers = require("../helpers/general.helpers")
-const fs = require('fs')
+
 
 // download the test document to the student's pc 
 const getTestDocument = (req, res) => {
@@ -50,8 +50,8 @@ const enterTest = (req, res) => {
 	}
 
 
-    const accessToken = req.body.accessToken;
-    studentDB.enterTest(req, res, accessToken)
+    const testId = req.body.testId;
+    studentDB.enterTest(req, res, testId)
     
 }
 

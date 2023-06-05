@@ -1,9 +1,9 @@
-  const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs')
 const fs = require('fs');
 const path = require('path');
 const base64 = require('base64-js');
 const atob = require('atob');
-
+const os = require('os');
 
 
 // this function hashes a given password and return it 
@@ -15,6 +15,22 @@ const hashPassword = (plainPass, callback) => {
 }
 
 
+
+// get local ip address in case of local host
+const getLocalIP = () =>  {
+ 	const interfaces = os.networkInterfaces();
+  	for (const iface of Object.values(interfaces)) {
+    	for (const connection of iface) {
+      		if (connection.family === 'IPv4' && !connection.internal) {
+        		return connection.address;
+      		}
+    	}
+  	}
+  	return 'Unknown IP';
+}
+
+const localIP = getLocalIP();
+console.log(`Local IP address: ${localIP}`);
 
 const saveDocxFromBase64 = (base64Str, savePath) => {
     // convert the base64 string to a byte array
@@ -72,5 +88,6 @@ module.exports = {
     hashPassword,
     saveDocxFromBase64,
     fileToBase64,
-    generateRandomString
+    generateRandomString,
+	getLocalIP
 }
